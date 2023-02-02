@@ -2,6 +2,10 @@ import * as ReactDOM from 'react-dom';
 
 //https://github.com/electron/electron-quick-start-typescript/tree/master/src
 
+import MyModule from 'vanjacloudjs.shared';
+
+console.log('Hello from Electron!');
+console.log(MyModule)
 
 import React from 'react';
 async function test() {
@@ -19,8 +23,11 @@ function MyApp() {
 }
 
 function render() {
+    const z = new MyModule();
+
     ReactDOM.render(<p>
         <h2>Hello from React!</h2>
+        <h2>{z.myThing}</h2>
         <MyApp />
     </p>, document.body);
 }

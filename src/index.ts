@@ -9,6 +9,11 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 import { ipcMain } from 'electron';
 import test from './backend';
 
+import MyModule from 'vanjacloudjs.shared';
+
+console.log('Hello from BACKEND!!!!!!');
+console.log(MyModule)
+
 test().then((res) => {
   console.log(res);
 });

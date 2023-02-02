@@ -44,6 +44,7 @@
     "@notionhq/client": "^2.2.3",
     "electron-squirrel-startup": "^1.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "vanjacloudjs.shared": "vanjaoljaca/vanjacloudjs.shared#main"
   }
 }
