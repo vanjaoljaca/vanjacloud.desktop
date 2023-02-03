@@ -6,13 +6,13 @@ import { Menu, Tray, nativeImage, globalShortcut } from 'electron';
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
-import { ipcMain } from 'electron';
+// import { ipcMain } from 'electron';
 import test from './backend';
 
-import MyModule from 'vanjacloudjs.shared';
+// import MyModule from 'vanjacloudjs.shared';
 
 console.log('Hello from BACKEND!!!!!!');
-console.log(MyModule)
+// console.log(MyModule)
 
 test().then((res) => {
   console.log(res);

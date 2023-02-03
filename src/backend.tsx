@@ -1,19 +1,28 @@
 
-import keys from '../../vanjacloudjs/keys';
+// import keys from '../../vanjacloudjs/keys';
 import { Client } from "@notionhq/client"
 // Initializing a client
 
 // console.log(keys)
 
-const notion = new Client({
-    auth: keys.notion
-})
-const proddbid = '1ccbf2c452d6453d94bc462a8c83c200'
-const testdbid = '4ef4fb0714c9441d94b06c826e74d5d3'
+console.log('Hello from BACKEND!');
 
-const dbid = testdbid;
 
-export default async function test() {
+export default async function boom() {
+    console.log('boom')
+    return;
+
+
+    const keys = {
+        notion: 'zzz'
+    }
+    const notion = new Client({
+        auth: keys.notion
+    })
+    const proddbid = '1ccbf2c452d6453d94bc462a8c83c200'
+    const testdbid = '4ef4fb0714c9441d94b06c826e74d5d3'
+
+    const dbid = testdbid;
 
     const res = await notion.databases.query({
         database_id: dbid,
