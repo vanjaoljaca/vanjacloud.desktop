@@ -9,7 +9,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "install-local": "./scripts/install-local.sh"
   },
   "keywords": [],
   "author": {
@@ -42,6 +43,8 @@
   },
   "dependencies": {
     "@notionhq/client": "^2.2.3",
+    "@types/auto-launch": "^5.0.2",
+    "auto-launch": "^5.0.5",
     "electron-squirrel-startup": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
