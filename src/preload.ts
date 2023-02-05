@@ -1,4 +1,4 @@
-import {Backend} from "./Backend";
+import {IBackend} from "./shared/IBackend";
 
 const {
   contextBridge,
@@ -10,7 +10,7 @@ const {
  * This backend api is exposed to the frontend
  * The render thread calls this to send messages to backend
  */
-const backendIpcProxy: Backend = {
+const backendIpcProxy: IBackend = {
   send: (channel: string, data: any) => {
     console.log('IpcRendererBackend.send', channel, data)
     ipcRenderer.send(channel, data);

@@ -1,7 +1,9 @@
 import * as ReactDOM from 'react-dom/client';
 import React, {useEffect, useRef, useState} from 'react';
-import {Backend} from "../Backend";
-import {ThoughtDB} from 'vanjacloudjs.shared';
+import {IBackend} from "../shared/IBackend";
+// import vanjacloud from 'vanjacloudjs.shared';
+// hacky below, to bypass key load mes temporaril
+import {ThoughtDB} from "../../../vanjacloudjs.shared/dist/src/notion";
 
 let thoughtdb: any = null;
 
@@ -9,9 +11,11 @@ const isDevelopment = process.env.NODE_ENV == 'development';
 
 console.log('isDev', isDevelopment)
 
-console.log(process.env.NODE_ENV)
-
 function initThoughtDb(notionkey: string, db: string) {
+  if(notionkey == null || notionkey == undefined) {
+    console.warn('no notion key');
+    return;
+  }
   thoughtdb = new ThoughtDB(notionkey, db)
 }
 
@@ -102,7 +106,7 @@ function render() {
   </>);
 }
 
-const backend = (window as any).backend as Backend
+const backend = (window as any).backend as IBackend
 
 // this part doesnt work:
 // backend.send('', 'Hello from app.tsx!');
@@ -120,6 +124,7 @@ async function onIpcTest() {
 
 async function init() {
   const r = await backend.request('', 'GetNotionInfo');
+  console.log('cwd', r.cwd);
   initThoughtDb(r.notionkey, r.dbid);
 }
 

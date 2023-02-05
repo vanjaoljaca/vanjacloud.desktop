@@ -63,7 +63,7 @@ const createWindow = (): void => {
     height: 400,
     width: 520,
     frame: false,
-    titleBarStyle: 'hiddenInset',
+    titleBarStyle: 'customButtonsOnHover',
     title: 'vanjacloudtop',
     show: false,
     webPreferences: {
@@ -204,9 +204,10 @@ async function doAppLauncher() {
   }
 
   if (isProd) {
-    console.log('Enabling auto start');
-    await appAutoLauncher.enable();
-    console.log('Enabling auto done');
+    if (!(await appAutoLauncher.isEnabled())) {
+      await appAutoLauncher.enable();
+      console.log('Enabling auto done');
+    }
   }
 }
 
