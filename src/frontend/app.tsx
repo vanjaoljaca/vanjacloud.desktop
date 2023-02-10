@@ -4,6 +4,7 @@ import {IBackend} from "../shared/IBackend";
 // import vanjacloud from 'vanjacloudjs.shared';
 // hacky below, to bypass key load mes temporaril
 import {ThoughtDB} from "../../../vanjacloudjs.shared/dist/src/notion";
+import {Translator} from "../shared/translate";
 
 let thoughtdb: any = null;
 
@@ -25,22 +26,31 @@ function getThoughtDb() {
 
 function MyApp() {
   const [text, setText] = useState('Piensalo...');
-  const [isSaving, setIsSaving] = useState(false);
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [translation, setTranslation] = useState<string>();
 
   async function save(msg: string) {
 
-    setIsSaving(true)
+    setIsSpinning(true)
     try {
       await getThoughtDb().saveIt(msg);
     } catch (e) {
       console.log('saveIt failed', e, msg);
     }
-    setIsSaving(false)
+    setIsSpinning(false)
   }
 
   async function onSave() {
     await save(text);
     setText('')
+  }
+
+  async function onTranslate() {
+    setIsSpinning(true)
+    const t = new Translator('key');
+    const r1 = await t.translate(text);
+    setIsSpinning(false)
+    setTranslation(JSON.stringify(r1, null, 2));
   }
 
   const inputRef = useRef(null);
@@ -57,8 +67,12 @@ function MyApp() {
       console.log('enter pressed');
 
       event.preventDefault();
-      await save(text);
-      setText('')
+      if(event.shiftKey) {
+        await onTranslate();
+      } else {
+        await save(text);
+        setText('')
+      }
       // inputRef.current.blur();
     }
   };
@@ -80,7 +94,7 @@ function MyApp() {
         value={text}
         onChange={(event) => setText(event.target.value)}
         style={{
-          filter: isSaving ? 'blur(5px)' : '',
+          filter: isSpinning ? 'blur(5px)' : '',
         }}
     />
     <br/>
@@ -88,6 +102,10 @@ function MyApp() {
     <br/>
     {/*    a button*/}
     <button onClick={onSave}>save</button>
+    <button onClick={onTranslate}>translate</button>
+    <textarea
+        value={translation}
+        rows={16} cols={50}/>
   </>
 }
 
@@ -101,7 +119,7 @@ function render() {
   )
   .render(<>
     <h2>Hello from React!</h2>
-    <button onClick={onIpcTest}>IPC Test!</button>
+    <button onClick={onTestThing}>Do Test thing!</button>
     <MyApp/>
   </>);
 }
@@ -118,8 +136,10 @@ const backend = (window as any).backend as IBackend
 //   }
 // });
 
-async function onIpcTest() {
-  console.log('ipc test empty')
+async function onTestThing() {
+  const t = new Translator('key');
+  const r1 = await t.translate('My Test string');
+  console.log('r1', r1);
 }
 
 async function init() {

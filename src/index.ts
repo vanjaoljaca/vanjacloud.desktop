@@ -88,7 +88,7 @@ const createWindow = (): void => {
     // ];
 
     details.responseHeaders['Content-Security-Policy'] = [
-        "default-src 'self' 'unsafe-inline' data:; connect-src https://api.notion.com ws://localhost:3000; script-src 'self' 'unsafe-inline' 'unsafe-eval' data:"
+      "default-src 'self' 'unsafe-inline' data:; connect-src https://api.notion.com ws://localhost:3000 https://api.cognitive.microsofttranslator.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' data:"
     ];
 
 
@@ -181,7 +181,12 @@ app.whenReady().then(() => {
 
     const focussed = BrowserWindow.getFocusedWindow();
     if (focussed == w[0]) {
-      w[0].hide();
+      try {
+        w[0].hide();
+      } catch (error) {
+        console.log('hide error (w, focussed, error)', w[0], focussed, error);
+      }
+
     } else {
       w[0].show();
     }
