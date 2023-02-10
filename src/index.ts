@@ -57,8 +57,11 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const createWindow = (): void => {
-  // Create the browser window.
+async function doDevStuff() {
+  backend.request('', 'dev')
+}
+
+const createWindow = async () => {
   const mainWindow = new BrowserWindow({
     height: 400,
     width: 520,
@@ -71,6 +74,15 @@ const createWindow = (): void => {
       webSecurity: false
     },
   });
+
+  if(isDevelopment) {
+    mainWindow.setSize(800, 600);
+    mainWindow.webContents.openDevTools();
+    mainWindow.show()
+    mainWindow.title = 'vanjacloudtop (dev)'
+
+    await doDevStuff();
+  }
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
@@ -87,10 +99,18 @@ const createWindow = (): void => {
     //   "default-src 'self' 'unsafe-inline' data:; connect-src https://api.notion.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' data:"
     // ];
 
+    const allowedUrls = [
+        'https://api.notion.com',
+        'ws://localhost:3000',
+        'https://api.cognitive.microsofttranslator.com',
+        'https://api.openai.com/',
+        'https://huggingface.com'
+    ]
+    const csp = "default-src 'self' 'unsafe-inline' data:; connect-src "
+      + allowedUrls.join(' ') + "; script-src 'self' 'unsafe-inline' 'unsafe-eval' data:"
     details.responseHeaders['Content-Security-Policy'] = [
-      "default-src 'self' 'unsafe-inline' data:; connect-src https://api.notion.com ws://localhost:3000 https://api.cognitive.microsofttranslator.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' data:"
+      csp
     ];
-
 
     callback({responseHeaders: details.responseHeaders});
   });

@@ -5,8 +5,10 @@ import {IBackend} from "../shared/IBackend";
 // hacky below, to bypass key load mes temporaril
 import {ThoughtDB} from "../../../vanjacloudjs.shared/dist/src/notion";
 import {Translator} from "../shared/translate";
+import {MicrophoneUI} from "./microphone";
 
 let thoughtdb: any = null;
+let translator: Translator = null;
 
 const isDevelopment = process.env.NODE_ENV == 'development';
 
@@ -24,10 +26,62 @@ function getThoughtDb() {
   return thoughtdb;
 }
 
+function TranslationView(props: { translation?: string[2][] }) {
+  const {translation} = props;
+  if (translation == null) {
+    return null;
+  }
+  return <>
+    <h3>Translation</h3>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 6fr', gridGap: '10px' }}>
+      {translation.map(([text, lang]) => <>
+        <div style={{fontWeight: 'bold'}} key={lang}>{lang.slice(0, 2)}</div>
+        <div key={lang+'-text'}>{text}</div>
+      </>
+      )}
+    </div>
+  </>
+}
+
+const NUM_MODES = 3;
+
 function MyApp() {
   const [text, setText] = useState('Piensalo...');
   const [isSpinning, setIsSpinning] = useState(false);
-  const [translation, setTranslation] = useState<string>();
+  const [translation, setTranslation] = useState<string[2][]>();
+  const [mode, setMode] = useState(0);
+
+  const handleKeyDownGlobal = (event) => {
+    if (event.key === 'Escape') {
+      console.log('escape pressed');
+      event.preventDefault();
+      setTranslation(null);
+      setMode(0)
+    }
+
+    // this doesnt work because mode is snapshotted welp
+    if (event.metaKey && event.shiftKey) {
+      if(event.key === '[') {
+        let newMode = mode == 0 ? NUM_MODES - 1 : mode - 1;
+        console.log('down mode', newMode, mode)
+        setMode(newMode);
+      } else if(event.key === ']') {
+
+        let newMode = mode == NUM_MODES - 1 ? 0 : mode + 1;
+        console.log('up mode', newMode, mode)
+        setMode(newMode);
+
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDownGlobal);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDownGlobal);
+    };
+  }, []);
 
   async function save(msg: string) {
 
@@ -47,10 +101,9 @@ function MyApp() {
 
   async function onTranslate() {
     setIsSpinning(true)
-    const t = new Translator('key');
-    const r1 = await t.translate(text);
+    const r1 = await translator.translate(text);
     setIsSpinning(false)
-    setTranslation(JSON.stringify(r1, null, 2));
+    setTranslation(r1.map((r:any) => [r.text, r.to]))
   }
 
   const inputRef = useRef(null);
@@ -77,8 +130,17 @@ function MyApp() {
     }
   };
 
+  if (translation != null) {
+    return <TranslationView
+        translation={translation} />
+  }
+
+  if(mode == 1) {
+    return <MicrophoneUI backend={backend} />
+  }
+
   return <>
-    <h2>Donk{isDevelopment && ' DEVELOPMENT'}</h2>
+    <h2>{isDevelopment && ' DEVELOPMENT'}</h2>
 
     <style>
       {`
@@ -100,12 +162,8 @@ function MyApp() {
     <br/>
     <br/>
     <br/>
-    {/*    a button*/}
     <button onClick={onSave}>save</button>
     <button onClick={onTranslate}>translate</button>
-    <textarea
-        value={translation}
-        rows={16} cols={50}/>
   </>
 }
 
@@ -114,12 +172,10 @@ function render() {
 
 
   ReactDOM.createRoot(
-      document.body
-      //document.getElementById('root')
+      // document.body
+      document.getElementById('root')
   )
   .render(<>
-    <h2>Hello from React!</h2>
-    <button onClick={onTestThing}>Do Test thing!</button>
     <MyApp/>
   </>);
 }
@@ -136,16 +192,13 @@ const backend = (window as any).backend as IBackend
 //   }
 // });
 
-async function onTestThing() {
-  const t = new Translator('key');
-  const r1 = await t.translate('My Test string');
-  console.log('r1', r1);
-}
 
 async function init() {
   const r = await backend.request('', 'GetNotionInfo');
   console.log('cwd', r.cwd);
   initThoughtDb(r.notionkey, r.dbid);
+  translator = new Translator(r.azureTranslateKey);
+  console.log(r.azureTranslateKey)
 }
 
 init();

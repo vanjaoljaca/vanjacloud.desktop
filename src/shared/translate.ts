@@ -17,7 +17,7 @@ export class Translator {
 
   async translate(text: string, to?: string[], from?: string) {
 
-    to = to || ['en', 'de', 'es', 'sr'];
+    to = to || ['en', 'de', 'es', 'sr-Cyrl-BA'];
 
     const r = await axios({
       baseURL: endpoint,
