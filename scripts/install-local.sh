@@ -1,4 +1,4 @@
-#! sh
+#! /bin/sh
 yarn make --arch=arm64 --platform=darwin
 pkill vanjacloudtop
 rm -rf ~/Applications/vanjacloudtop.app
