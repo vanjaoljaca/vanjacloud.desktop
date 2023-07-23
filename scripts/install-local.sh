@@ -1,6 +1,8 @@
 #! /bin/sh
 yarn make --arch=arm64 --platform=darwin
 pkill vanjacloudtop
-rm -rf ~/Applications/vanjacloudtop.app
-cp -r out/vanjacloudtop-darwin-arm64/vanjacloudtop.app ~/Applications
-open ~/Applications/vanjacloudtop.app
+set +e
+rm -rf ~/Applications/vanjacloud.desktop.app || true
+set -
+cp -r out/vanjacloud.desktop-darwin-arm64/vanjacloud.desktop.app ~/Applications
+open ~/Applications/vanjacloud.desktop.app

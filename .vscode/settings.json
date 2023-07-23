@@ -1,0 +1,11 @@
+{
+  "debug.internalConsoleOptions": "neverOpen",
+  "azureFunctions.scmDoBuildDuringDeployment": true,
+  "files.exclude": {
+    "dist": true,
+    "node_modules": true,
+    "out": true,
+    ".webpack": true,
+    ".idea": true,
+  }
+}
