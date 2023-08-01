@@ -7,7 +7,8 @@ import * as hf from 'huggingface-api'
 import fetch from 'node-fetch';
 import axios from "axios";
 import * as vanjacloud from "vanjacloud.shared.js";
-const ThoughtDB = (vanjacloud.default as any).ThoughtDB;
+import { ThoughtDB } from "vanjacloud.shared.js";
+
 const WHISPER_API_URL = 'https://api.openai.com/v1/engines/whisper/jobs';
 
 import dotenv from 'dotenv';
@@ -20,7 +21,7 @@ import keys from '../../../keys.json';
 const k = dotenv.parse(`${__dirname}/.env`)
 
 import { Configuration, OpenAIApi } from "openai";
-console.log(vanjacloud, ThoughtDB)
+
 const db = isDevelopment ? ThoughtDB.testdbid : ThoughtDB.proddbid;
 const keysmessage = {
     type: 'notion',

@@ -5,8 +5,7 @@ import { IBackend } from "../shared/IBackend";
 import { Translator } from "../shared/translate";
 import { MicrophoneUI } from "./microphone";
 
-import * as vanjacloud from "vanjacloud.shared.js";
-const ThoughtDB = (vanjacloud.default as any).ThoughtDB;
+import { ThoughtDB } from "vanjacloud.shared.js";
 
 
 let thoughtdb: any = null;
@@ -190,34 +189,33 @@ function MyApp() {
     }
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '90vh', boxSizing: 'border-box' }}>
-            {isDevelopment && <h2>DEVELOPMENT</h2>}
+        <body className="font-sans m-auto max-w-[38rem] p-8 bg-blue-100 text-gray-800">
+            <div className="flex flex-col flex-grow box-border bg-white rounded shadow-lg p-4">
 
-            <TextInput
-                trigger={Object.keys(completions)}
-                //defaultHashtags
-                options={completions}
-                ref={inputRef}
-                autoFocus
-                onKeyDown={handleKeyDown}
+                {isDevelopment && <h2 className="text-red-600 font-bold">DEVELOPMENT</h2>}
 
-                text={text}
-                onChange={(text) => setText(text)}
-                style={{
-                    filter: isSpinning ? 'blur(5px)' : '',
-                    flex: '1 1 auto', // This makes the textarea grow and shrink as needed
-                    margin: '1em',
-                    resize: 'none',
-                    boxSizing: 'border-box', // Include padding and border in width and height
-                    overflow: 'auto', // Add scrollbars if the content overflows
-                }}
-            />
+                <TextInput
+                    trigger={Object.keys(completions)}
+                    options={completions}
+                    ref={inputRef}
+                    autoFocus
+                    onKeyDown={handleKeyDown}
 
-            <div style={{ display: 'flex', justifyContent: 'space-around', padding: '1em' }}>
-                <button onClick={onSave}>save</button>
-                <button onClick={onTranslate}>translate</button>
+                    text={text}
+                    onChange={(text) => setText(text)}
+                    className={`resize-none overflow-auto transition-all duration-500 
+                      ${isSpinning ? 'blur' : ''} flex-grow m-4`}
+                />
+
+                <div className="flex justify-around py-2">
+                    <button onClick={onSave}>save</button>
+                    <button onClick={onTranslate}>translate</button>
+                </div>
             </div>
-        </div>
+        </body>
+
+
+
     );
 
 
