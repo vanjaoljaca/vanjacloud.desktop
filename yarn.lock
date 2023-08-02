@@ -5669,6 +5669,11 @@ react-autocomplete-input@^1.0.20:
     prop-types "^15.7.2"
     textarea-caret "^3.0.2"
 
+react-daisyui@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/react-daisyui/-/react-daisyui-4.0.3.tgz#ac0eda5a2476baf5eacf82a44e49359f5a8efc10"
+  integrity sha512-osps3JpavddrJzQU/T9Mp0WRxLkaQm9tYXUP12b3h3GaoNb1pp+EvGiNPNczx1xjVL9Jn/xj9YB5gSOsoyyBOQ==
+
 react-dom@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.2.0.tgz#22aaf38708db2674ed9ada224ca4aa708d821e3d"
