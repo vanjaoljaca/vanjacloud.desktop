@@ -56,10 +56,11 @@ function getHashTags(text) {
 }
 
 
-const NUM_MODES = 3;
+const NUM_MODES = 3; // todo: this is gone..
 
 import TextInput from 'react-autocomplete-input';
 import 'react-autocomplete-input/dist/bundle.css';
+import { TabView } from './TabView';
 
 const defaultHashtags = [
     '#work', '#idea', '#app', '#tweet', '#ai', '#lyrics', '#writing', '#name',
@@ -179,43 +180,40 @@ function MyApp() {
         }
     };
 
-    if (translation != null) {
-        return <TranslationView
-            translation={translation} />
-    }
-
-    if (mode == 1) {
-        return <MicrophoneUI backend={backend} />
-    }
-
     return (
-        <body className="font-sans m-auto max-w-[38rem] p-8 bg-blue-100 text-gray-800">
-            <div className="flex flex-col flex-grow box-border bg-white rounded shadow-lg p-4">
+        <div className="flex flex-col h-full w-full">
+            <div className="flex flex-col flex-grow box-border rounded shadow-lg p-4
+            font-sans m-auto p-8 bg-blue-100 text-gray-800 h-full w-full" >
+                <TabView names={['main', 'mic']} activeTabIndex={mode}>
 
-                {isDevelopment && <h2 className="text-red-600 font-bold">DEVELOPMENT</h2>}
+                    {
+                        translation != null ? <TranslationView translation={translation} />
+                            : <div className="flex flex-col h-full w-full">
+                                {isDevelopment && <h2 className="text-red-600 font-bold">DEVELOPMENT</h2>}
 
-                <TextInput
-                    trigger={Object.keys(completions)}
-                    options={completions}
-                    ref={inputRef}
-                    autoFocus
-                    onKeyDown={handleKeyDown}
+                                <TextInput
+                                    trigger={Object.keys(completions)}
+                                    options={completions}
+                                    ref={inputRef}
+                                    autoFocus
+                                    onKeyDown={handleKeyDown}
 
-                    text={text}
-                    onChange={(text) => setText(text)}
-                    className={`resize-none overflow-auto transition-all duration-500 
-                      ${isSpinning ? 'blur' : ''} flex-grow m-4`}
-                />
+                                    text={text}
+                                    onChange={(text) => setText(text)}
+                                    className={`resize-none overflow-auto transition-all duration-500 flex-grow w-full box-content ${isSpinning ? 'blur' : ''}`}
+                                />
 
-                <div className="flex justify-around py-2">
-                    <button onClick={onSave}>save</button>
-                    <button onClick={onTranslate}>translate</button>
-                </div>
+                                <div className="flex justify-around py-2 w-full">
+                                    <button onClick={onSave}>save</button>
+                                    <button onClick={onTranslate}>translate</button>
+                                </div>
+                            </div>
+                    }
+                    <MicrophoneUI backend={backend} />
+                </TabView>
             </div>
-        </body>
 
-
-
+        </div>
     );
 
 
@@ -225,9 +223,11 @@ function MyApp() {
 function render() {
 
 
+    const element = document.getElementById('root');
+    console.log(element)
     ReactDOM.createRoot(
         // document.body
-        document.getElementById('root')
+        element
     )
         .render(<>
             <MyApp />
