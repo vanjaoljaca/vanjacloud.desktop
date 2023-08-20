@@ -2,14 +2,13 @@ import * as ReactDOM from 'react-dom/client';
 import React, { useEffect, useRef, useState } from 'react';
 import { IBackend } from "../shared/IBackend";
 // import { ThoughtDB } from "vanjacloud.shared.js";
-import { Translator } from "../shared/translate";
 import { MicrophoneUI } from "./microphone";
 
-import { ThoughtDB } from "vanjacloud.shared.js";
+import { ThoughtDB, AzureTranslate } from "vanjacloud.shared.js";
 
 
-let thoughtdb: any = null;
-let translator: Translator = null;
+let thoughtdb: ThoughtDB = null;
+let translator: AzureTranslate = null;
 
 const isDevelopment = process.env.NODE_ENV == 'development';
 
@@ -28,21 +27,22 @@ function getThoughtDb() {
     return thoughtdb;
 }
 
-function TranslationView(props: { translation?: string[2][] }) {
+function TranslationView(props: { translation?: Translation[] }) {
     const { translation } = props;
     if (translation == null) {
         return null;
     }
-    return <>
+    return (<>
         <h3>Translation</h3>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 6fr', gridGap: '10px' }}>
-            {translation.map(([text, lang]) => <>
-                <div style={{ fontWeight: 'bold' }} key={lang}>{lang.slice(0, 2)}</div>
-                <div key={lang + '-text'}>{text}</div>
-            </>
-            )}
+            {translation.map((t) => (
+                <React.Fragment key={t.to} >
+                    <div style={{ fontWeight: 'bold' }} key={t.to}>{t.to.slice(0, 2)}</div>
+                    <div key={t.to + '-text'}>{t.text}</div>
+                </React.Fragment>
+            ))}
         </div>
-    </>
+    </>)
 }
 
 function getHashTags(text) {
@@ -61,6 +61,7 @@ const NUM_MODES = 3; // todo: this is gone..
 import TextInput from 'react-autocomplete-input';
 import 'react-autocomplete-input/dist/bundle.css';
 import { TabView } from './TabView';
+import { Translation } from 'vanjacloud.shared.js/dist/src/AzureTranslate';
 
 const defaultHashtags = [
     '#work', '#idea', '#app', '#tweet', '#ai', '#lyrics', '#writing', '#name',
@@ -97,7 +98,7 @@ const completions = generateCompletionList(defaultHashtags);
 function MyApp() {
     const [text, setText] = useState('Piensalo...');
     const [isSpinning, setIsSpinning] = useState(false);
-    const [translation, setTranslation] = useState<string[2][]>();
+    const [translation, setTranslation] = useState<Translation[]>();
     const [mode, setMode] = useState(0);
 
     const handleKeyDownGlobal = (event) => {
@@ -153,8 +154,10 @@ function MyApp() {
         setIsSpinning(true)
         const r1 = await translator.translate(text);
         setIsSpinning(false)
-        setTranslation(r1.map((r: any) => [r.text, r.to]))
+        setTranslation(r1)
+        const r = await getThoughtDb().saveTranslation(r1)
     }
+
 
     const inputRef = useRef(null);
 
@@ -251,7 +254,7 @@ async function init() {
     const r = await backend.request('', 'GetNotionInfo');
     console.log('cwd', r.cwd);
     initThoughtDb(r.notionkey, r.dbid);
-    translator = new Translator(r.azureTranslateKey);
+    translator = new AzureTranslate(r.azureTranslateKey);
     console.log(r.azureTranslateKey)
 }
 

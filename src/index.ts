@@ -72,9 +72,14 @@ const createWindow = async () => {
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       webSecurity: false
-    }
+    },
+    alwaysOnTop: true
   });
 
+
+  // Always on top thing TODO
+  mainWindow.setAlwaysOnTop(true, 'screen-saver');
+  mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
 
   if (isDevelopment) {
     mainWindow.setSize(800, 600);
@@ -84,10 +89,6 @@ const createWindow = async () => {
 
     await doDevStuff();
   }
-
-  // Always on top thing TODO
-  //win.setAlwaysOnTop(true, 'screen-saver');
-  //setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
