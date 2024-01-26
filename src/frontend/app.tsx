@@ -88,7 +88,7 @@ function generateCompletionList(tags, limit = 5) {
         completionList[prefix] = [];
       }
       if (completionList[prefix].length < limit) {
-        completionList[prefix].push(tag);
+        completionList[prefix].push(tag.slice(i));
       }
     }
   });
@@ -96,6 +96,7 @@ function generateCompletionList(tags, limit = 5) {
 }
 
 const completions = generateCompletionList(defaultHashtags);
+console.log({ completions })
 
 
 
