@@ -17,7 +17,7 @@ export const mainConfig: Configuration = {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
     alias: {
       'ix$': path.resolve(__dirname, 'node_modules/ix/Ix.node.js'),
-    }
+    },
   },
-
+  devtool: 'source-map'
 };

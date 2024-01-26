@@ -1,3 +1,4 @@
+import 'web-streams-polyfill';
 // In the main process:
 import { app, BrowserWindow, session } from 'electron';
 import { Menu, Tray, nativeImage, globalShortcut } from 'electron';
@@ -110,7 +111,8 @@ const createWindow = async () => {
       'ws://localhost:3000',
       'https://api.cognitive.microsofttranslator.com',
       'https://api.openai.com/',
-      'https://huggingface.com'
+      'https://huggingface.com',
+      'http://localhost:3000'
     ]
     const csp = "default-src 'self' 'unsafe-inline' data:; connect-src "
       + allowedUrls.join(' ') + "; script-src 'self' 'unsafe-inline' 'unsafe-eval' data:"
