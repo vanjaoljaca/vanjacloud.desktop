@@ -207,7 +207,7 @@ function MyApp() {
                   autoFocus
                   onKeyDown={handleKeyDown}
 
-                  text={text}
+                  value={text}
                   onChange={(text) => setText(text)}
                   className={`resize-none overflow-auto transition-all duration-500 flex-grow w-full box-content ${isSpinning ? 'blur' : ''}`}
                 />
