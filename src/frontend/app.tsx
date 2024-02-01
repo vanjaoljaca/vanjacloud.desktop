@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('source-map-support').install();
 
+import MyEditor from './MyEditor';
 import 'web-streams-polyfill';
 
 import * as ReactDOM from 'react-dom/client';
@@ -100,9 +101,6 @@ function generateCompletionList(tags, limit = 5) {
 const completions = generateCompletionList(defaultHashtags);
 console.log({ completions })
 
-
-
-
 function MyApp() {
   const [text, setText] = useState('Piensalo...');
   const [isSpinning, setIsSpinning] = useState(false);
@@ -191,6 +189,7 @@ function MyApp() {
     }
   };
 
+
   return (
     <div className="flex flex-col h-full w-full">
       <div className="flex flex-col flex-grow box-border rounded shadow-lg p-4
@@ -202,7 +201,11 @@ function MyApp() {
               : <div className="flex flex-col h-full w-full">
                 {isDevelopment && <h2 className="text-red-600 font-bold">DEVELOPMENT</h2>}
 
-                <TextInput
+                <div className={`resize-none overflow-auto transition-all duration-500 flex-grow w-full box-content ${isSpinning ? 'blur' : ''}`} style={{ display: 'flex' }}>
+                  <MyEditor />
+                </div>
+
+                {/* <TextInput
                   trigger="#"
                   options={defaultHashtagsMinusHash}
                   ref={inputRef}
@@ -212,7 +215,8 @@ function MyApp() {
                   value={text}
                   onChange={(text) => setText(text)}
                   className={`resize-none overflow-auto transition-all duration-500 flex-grow w-full box-content ${isSpinning ? 'blur' : ''}`}
-                />
+                /> */}
+
 
                 <div className="flex justify-around py-2 w-full">
                   <button onClick={onSave}>save</button>
@@ -222,9 +226,9 @@ function MyApp() {
           }
           <MicrophoneUI backend={backend} />
         </TabView>
-      </div>
+      </div >
 
-    </div>
+    </div >
   );
 
 
