@@ -1,6 +1,6 @@
 // open ai client
-import {Configuration, OpenAIApi} from "openai";
-import {IBackend} from "../shared/IBackend";
+import { OpenAI } from "openai";
+import { IBackend } from "../shared/IBackend";
 
 const flattenBuffer = (buffer) => {
   let flatBuffer = [];
@@ -12,7 +12,7 @@ const flattenBuffer = (buffer) => {
 
 
 async function one() {
-  const stream = await navigator.mediaDevices.getUserMedia({audio: true})
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
 
   // Access granted, start recording audio
   const context = new AudioContext();
@@ -65,7 +65,7 @@ async function two(backend: IBackend) {
   console.log(r);
 }
 
-export function MicrophoneUI({backend}: { backend: IBackend }) {
+export function MicrophoneUI({ backend }: { backend: IBackend }) {
 
   return <>
     <button onClick={one}>one</button>

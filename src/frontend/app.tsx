@@ -79,6 +79,8 @@ const defaultHashtags = [
   '#singing', '#content', '#coulddo', '#shoulddo', '#followup', '#quote'
 ]
 
+const defaultHashtagsMinusHash = defaultHashtags.map((h) => h.slice(1));
+
 function generateCompletionList(tags, limit = 5) {
   const completionList = {};
   tags.forEach(tag => {
@@ -201,8 +203,8 @@ function MyApp() {
                 {isDevelopment && <h2 className="text-red-600 font-bold">DEVELOPMENT</h2>}
 
                 <TextInput
-                  trigger={Object.keys(completions)}
-                  options={completions}
+                  trigger="#"
+                  options={defaultHashtagsMinusHash}
                   ref={inputRef}
                   autoFocus
                   onKeyDown={handleKeyDown}
